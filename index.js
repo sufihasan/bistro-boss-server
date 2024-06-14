@@ -7,7 +7,7 @@ require('dotenv').config();
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT;
 
 //middle ware
 app.use(cors());
@@ -88,6 +88,7 @@ async function run() {
             res.send(result);
         });
 
+        //chack admin or not if admin send true else send false ---eddit by hasan
         app.get('/users/admin/:email', varifyToken, async (req, res) => {
             const email = req.params.email;
             if (email !== req.decoded.email) {
@@ -106,6 +107,7 @@ async function run() {
 
         })
 
+        //make new user call from sign up page eddit by hasan
         app.post('/users', async (req, res) => {
             const user = req.body;
             //insert email if user doesnot exists
@@ -118,7 +120,7 @@ async function run() {
             const result = await userCollection.insertOne(user);
             res.send(result);
         })
-
+        //set user as admin edite by hasan 
         app.patch('/users/admin/:id', verifyAdmin, varifyToken, async (req, res) => {
             const id = req.params.id;
             const filter = { _id: new ObjectId(id) }
